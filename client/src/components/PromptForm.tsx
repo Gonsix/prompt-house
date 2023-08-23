@@ -3,6 +3,7 @@
 import ModelSelectComponent from "./ModelSelectComponent";
 import PromptInputForm from "./PromptInputForm";
 import ResizableDescriptionForm from "./ResizableDescriptionForm";
+import PriceComponent from "./PriceComponent";
 import { useState } from "react";
 
 export default function PromptForm() {
@@ -31,7 +32,10 @@ export default function PromptForm() {
                 <PromptInputForm />
             </div>
 
-            <div>
+            <div className="space-y-2">
+                <a className="font-bold">Price</a>
+                <div className="text-gray-400">Input price.</div>
+                <PriceComponent />
             </div>
         
         </div>

@@ -23,7 +23,6 @@ export default function Upload() {
         selectedModel, setSelectedModel,
         price, setPrice,
     } = useContext(SPTContext);
-    setPrice("10"); // Temporary
 
 
 
