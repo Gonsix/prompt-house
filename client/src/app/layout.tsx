@@ -2,6 +2,12 @@
 import './globals.css'
 import type { Metadata } from 'next'
 
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import { ThirdwebProvider } from '@/components/ThirdwebProvider';
+import {Sepolia} from "@thirdweb-dev/chains";
+
+
 
 export const metadata: Metadata = {
   title: '🪄 PromptHouse',
@@ -17,7 +23,16 @@ export default function RootLayout({
     <html lang="en">      
       <body className="center">
         <main>    
-          {children}
+          <ThirdwebProvider activeChain={Sepolia}>
+            <div className='mb-8'>
+              <Header/>
+            </div>
+
+            {children}
+            <div className='mt-4'>
+              <Footer/>
+            </div>
+          </ThirdwebProvider>
         </main>
       </body>
     </html>

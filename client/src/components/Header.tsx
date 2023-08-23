@@ -1,8 +1,11 @@
 "use client"
 import Link from "next/link"; 
+import { usePathname } from "next/navigation"; // Sell ページにいるときにボタンにスポットライトを当てるため
 import { ConnectWallet } from "@thirdweb-dev/react";
 
+
 export default function Header() { 
+  const pathname = usePathname();
   return (
     <header>
       <Link href="/" className="logo">
@@ -23,22 +26,40 @@ export default function Header() {
       </div>
 
 
-      <div className="navlinks">
+      <div className="navlinks ">
+        <div className={`rounded-full ${pathname === "/sell" ? "bg-purple-400" : ""}`} >
         <Link href="/sell" className="flex gap-1 items-center group">
-          <span className="group-[.active]:text-pbr-darkpurple">Sell</span>
+        <button >
+          <span className={`flex gap-1 items-center group  `} >
+            Sell
+          </span>
           {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white group-[.active]:text-pbr-darkpurple">
             <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />
           </svg> */}
+        </button>
+
         </Link>
+        </div>
       </div>
+
+
       <div className="navlinks">
+        <div className={`rounded-full ${pathname === "/owned" ? "bg-purple-400" : ""}`} >
+        <Link href="/owned" className="flex gap-1 items-center group">
+        <button >
+          <span className={`flex gap-1 items-center group  `} >
+            Owned
+          </span>
+          {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white group-[.active]:text-pbr-darkpurple">
+            <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />
+          </svg> */}
+        </button>
 
-        <Link href="/sell" className="flex gap-1 items-center group">
-          <span className="group-[.active]:text-pbr-darkpurple">Owned</span>
         </Link>
+        </div>
       </div>
 
-      <div>
+      <div className="w-52">
         <ConnectWallet theme="dark"/>
       </div>
 
