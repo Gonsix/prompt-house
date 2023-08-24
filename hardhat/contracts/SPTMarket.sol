@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 
 // SPT: Shareble Prompt Token
@@ -19,7 +20,10 @@ struct SPT {
 
 contract SPTMarket {
 
+    address private deployer;
+
     SPT[] private SPT_list; 
+    using SafeMath for uint;
     mapping (address => uint[]) ownedSPTs; // 所有しているSPT一覧を格納。もしかしたら The graph で代用できる。
     mapping (address => uint[]) listedSPTs; // 
 
@@ -45,6 +49,15 @@ contract SPTMarket {
         _;
     }
 
+    modifier onlyDeployer() {
+        require( deployer == msg.sender, "onlyDeployer: Only deployer can access to this method");
+        _;
+    }
+
+    constructor() {
+        deployer = msg.sender;
+    }
+
 
     function createSPT(string memory tokenURI, string memory prompt, string memory description, string memory model, uint price) public {
         require(price >= 0, "createSPT: price must be greater than or equals to 0");
@@ -56,7 +69,7 @@ contract SPTMarket {
             id: _id,
             tokenURI: tokenURI,
             publisher: msg.sender,
-            owners: owners, // mapping は初期化できない？
+            owners: owners,
             prompt: prompt,
             description: description,
             model: model,
@@ -83,36 +96,38 @@ contract SPTMarket {
 
         item.owners.push(msg.sender);
 
+        payable(item.publisher).transfer(item.price.mul(90).div(100));
+
+
         emit SPTUpdate(id, item.tokenURI, item.publisher, item.owners, item.prompt, item.description, item.model, item.price, item.isCanceled);
         // ownedSPTs[msg.sender].push(id);
     }
 
 
 
-    function updateSPT(uint id, string memory tokenURI, string memory prompt, string memory description, string memory model, uint price, bool isCanceled) public {
+    function updateSPT(uint id, string memory tokenURI, string memory prompt, string memory description, string memory model, uint price, bool isCanceled) public onlyPublisher(id) {
         SPT storage item = SPT_list[id];
-        require(msg.sender == item.publisher, "updateSPT: Only Publisher can update the listed SPT");
 
         emit SPTUpdate(id, tokenURI, item.publisher, item.owners, prompt, description, model, price, isCanceled); // item. が付いているのは、変わらないやつ
     }
 
-    function getSPTInfo(uint _id) public view returns(
-        uint id,
-        string memory tokenURI,
-        address publisher, // person who created the prompt.
-        address[] memory owners,  // person who have an access to the prompt  // mapping (address => bool) isInOwners; // True if a person have an access to the prompt
+    // function getSPTInfo(uint _id) public view returns(
+    //     uint id,
+    //     string memory tokenURI,
+    //     address publisher, // person who created the prompt.
+    //     address[] memory owners,  // person who have an access to the prompt  // mapping (address => bool) isInOwners; // True if a person have an access to the prompt
 
-        string memory prompt,
-        string memory description,
-        string memory model,
-        // float tempareture
-        uint price,
-        bool isCanceled
-    )  {
-        SPT storage item = SPT_list[_id];
-        return (item.id, item.tokenURI, item.publisher, item.owners, item.prompt, item.description, item.model, item.price, item.isCanceled);
-        // 配列の形で返る
-    }
+    //     string memory prompt,
+    //     string memory description,
+    //     string memory model,
+    //     // float tempareture
+    //     uint price,
+    //     bool isCanceled
+    // )  {
+    //     SPT storage item = SPT_list[_id];
+    //     return (item.id, item.tokenURI, item.publisher, item.owners, item.prompt, item.description, item.model, item.price, item.isCanceled);
+    //     // 配列の形で返る
+    // }
 
 
 
@@ -121,6 +136,42 @@ contract SPTMarket {
     //     require(msg.sender == item.publisher, "cancelList: Only Publisher can cancel listing");
     // }
 
-    // function withdraw(){}
+
+
+    function getSPTInfo(uint _id) public view returns( 
+        uint id,
+        string memory tokenURI,
+        address publisher, // person who created the prompt.
+        address[] memory owners,  // person who have an access to the prompt  // mapping (address => bool) isInOwners; // True if a person have an access to the prompt
+
+        string memory description,
+        string memory model,
+        // float tempareture
+        uint price,
+        bool isCanceled
+    ) {
+        
+        SPT storage item = SPT_list[_id];
+        return (item.id, item.tokenURI, item.publisher, item.owners, item.description, item.model, item.price, item.isCanceled);
+    }
+
+
+
+
+    function getNumItems() public view returns(uint numItem){
+        numItem = SPT_list.length;
+        return numItem;
+    }
+
+    function checkFunds() public view onlyDeployer() returns (uint) {
+        uint256 balance =  address(this).balance;
+        return balance;        
+    }
+
+    function withdrawFunds() public onlyDeployer() {
+        uint256 balance =  address(this).balance;
+        require(balance > 0, "NFTMarket: balance is zero");
+        payable(deployer).transfer(balance);
+    }
 
 }

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@splidejs/react-splide": "^0.7.12",
     "@thirdweb-dev/react": "^3.14.35",
     "@thirdweb-dev/sdk": "^3.10.54",
     "@types/node": "20.5.1",

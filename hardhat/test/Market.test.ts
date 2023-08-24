@@ -101,7 +101,7 @@ async function main() {
                 );
 
                 await expect(tx2).to.be.revertedWith(
-                    'updateSPT: Only Publisher can update the listed SPT'
+                    'onlyPublisher: Only publisher can access to this method'
                 );
 
             });
@@ -245,6 +245,52 @@ async function main() {
             });
         });
     });
+
+    describe("withDrawFunds", function () {
+        it("successfully withdrawn - 10% commission fee ", async function() {
+            // createSPT -> buySPT -> withDrawFunds
+            
+            const { market,  account1, account2, account3 } = await loadFixture(deploySPTMarketFixture);
+            const deployer = account1;
+            const publisher = account2;
+            const buyer = account3;
+
+            // 1. createSPT
+            const tokenURI = "http://sampleurl.co.jp";
+            const prompt = "This is a test prompt";
+            const description = "Test description";
+            const model = "gpt3.5-turbo";
+            const price = ethers.parseUnits("1");
+
+            const tx1 = await market.connect(publisher).createSPT(
+                tokenURI,
+                prompt,
+                description,
+                model,
+                price
+            );
+            await tx1.wait();
+
+            // 2. buySPT
+            const tx2 = await market.connect(buyer).buySPT(0, { value: price});
+            await tx2.wait();
+
+            const funds = await market.connect(deployer).checkFunds();
+            // console.log("funds:", funds);
+            // console.log("price:", price);
+            expect(price).to.eq(funds* 10n);
+            // withdraw
+            await market.connect(deployer).withdrawFunds();
+
+            const next_funds = await market.connect(deployer).checkFunds();
+            
+            expect(next_funds).to.eq(0);
+
+            // console.log(await market.getNumItems());
+
+
+        })
+    })
     
     
 }

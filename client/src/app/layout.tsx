@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className="center">
         <main>    
           <ThirdwebProvider activeChain={Sepolia}>
-            <div className='mb-8'>
+            <div className='mb-12'>
               <Header/>
             </div>
 

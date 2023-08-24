@@ -33,7 +33,7 @@ export default function SellPage() {
 
   // }
   const [prompt, setPrompt] = useState<string>('');
-    const [selectedModel, setSelectedModel] = useState<string>('');
+    const [selectedModel, setSelectedModel] = useState<string>('Stable Diffution');
     const [description, setDescription] = useState<string>('');
     const [price, setPrice] = useState('');
     const [tokenURI, setTokenURI]  = useState<string>('');
@@ -72,7 +72,8 @@ export default function SellPage() {
         <Published/>
       </div>
 
-      <div>{selectedModel}</div>
+
+      {/* <div>{selectedModel}</div> */}
       {/* <div>{description}</div>
       <div>{price}</div> */}
     </div>
