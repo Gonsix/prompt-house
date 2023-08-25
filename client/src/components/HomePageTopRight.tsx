@@ -8,8 +8,8 @@ export default function HomePageTopRight() {
       <Image
           src="/images/HomeImage.png"
           alt="猫は最高に可愛い"
-          width={512}
-          height={512}
+          width={630}
+          height={630}
           className="rounded-lg"
         />
     </div>

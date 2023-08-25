@@ -212,6 +212,10 @@ contract SPTMarket {
         return (item.id, item.tokenURI, item.publisher, item.owners, item.description, item.model, item.price, item.isCanceled);
     }
 
+    function getTokenURI(uint id) public view returns(string memory tokenURI) {
+        SPT storage item = SPT_list[id];
+        return item.tokenURI;
+    }
 
 
 
