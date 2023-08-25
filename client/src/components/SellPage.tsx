@@ -5,11 +5,14 @@ import Upload from "@/components/Upload"
 import Published from "@/components/Published"
 import PromptForm from "@/components/PromptForm"
 import React from "react";
+import PriceComponent from "./PriceComponent";
 
 // Context 増やす時
 type SPTContextType = {
     prompt : string,
     setPrompt: (value: string) => void,
+    params : string,
+    setParams : (value: string) => void,
     selectedModel: string,
     setSelectedModel : (value: string) => void,
     description: string,
@@ -32,7 +35,8 @@ export default function SellPage() {
   //   console.log("already connected");
 
   // }
-  const [prompt, setPrompt] = useState<string>('');
+    const [prompt, setPrompt] = useState<string>('');
+    const [params, setParams] = useState<string>('');
     const [selectedModel, setSelectedModel] = useState<string>('Stable Diffution');
     const [description, setDescription] = useState<string>('');
     const [price, setPrice] = useState('');
@@ -42,6 +46,8 @@ export default function SellPage() {
     const SPTcontextValue = {
         prompt : prompt,
         setPrompt : setPrompt, 
+        params : params,
+        setParams : setParams,
         selectedModel : selectedModel,
         setSelectedModel : setSelectedModel,
         description : description,
@@ -58,7 +64,19 @@ export default function SellPage() {
         <SPTContext.Provider value={SPTcontextValue}>
             <div className="flex-grow flex">
                 <div className="flex-grow">
-                <Upload/>
+                  <div className="flex flex-col">
+                    <div className="">
+                      <Upload/> 
+                    </div>
+                    {/* <div>
+                        <div>
+
+                          <a className="font-bold mb-2">Price</a>
+                          <PriceComponent/>
+                        </div>
+                    </div> */}
+
+                  </div>
                 </div>
                 <div className="flex-grow">
                 <PromptForm />

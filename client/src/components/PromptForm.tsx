@@ -4,7 +4,7 @@ import ModelSelectComponent from "./ModelSelectComponent";
 import PromptInputForm from "./PromptInputForm";
 import ResizableDescriptionForm from "./ResizableDescriptionForm";
 import PriceComponent from "./PriceComponent";
-import { useState } from "react";
+import ResizableParametersForm from "./ResizableParametersForm";
 
 export default function PromptForm() {
 
@@ -30,6 +30,12 @@ export default function PromptForm() {
                 <a className="font-bold">Prompt</a>
                 <div className="text-gray-400">Please enter your prompt.</div>
                 <PromptInputForm />
+            </div>
+
+            <div className="space-y-2">
+                <a className="font-bold">Parameters</a>
+                <div className="text-gray-400">Give a parameters info.</div>
+                <ResizableParametersForm />
             </div>
 
             <div>

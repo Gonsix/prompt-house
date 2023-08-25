@@ -8,7 +8,8 @@ import { SPTContext } from "@/components/SellPage";
 
 import { ethers } from "ethers";
 import { Marketplace } from '@thirdweb-dev/sdk';
-import SPTMarketABI from "../contracts/SPTMarket.json";
+import SPTMarketABI from "../../../hardhat/artifacts/contracts/SPTMarket.sol/SPTMarket.json";
+import SPTMarket from "../../../hardhat/contractAddress.json";
 
 export default function Upload() {
     const [file, setFile] = useState(null);
@@ -19,6 +20,7 @@ export default function Upload() {
     const {
         tokenURI, setTokenURI,
         prompt, setPrompt,
+        params, setParams,
         description, setDescription,
         selectedModel, setSelectedModel,
         price, setPrice,
@@ -32,12 +34,14 @@ export default function Upload() {
         if(!file){
             return;
         }
+        console.log("file", file);
+
 
         setUploading(true);
 
         const client = new NFTStorage({token : process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY as string}); // ここにハードコードでも構わない
         const metadata = await client.store({
-            name: "First Image",
+            name: "SPT-Market-Image",
             description: "",
             image: file
         });
@@ -60,12 +64,13 @@ export default function Upload() {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
-        const MARKET_ADDRESS = "0xB9089CFF3aDd184579F063b5e19E5178B039B555";
+        const MARKET_ADDRESS = SPTMarket.address;
         const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
-        const tx = await market.connect(signer).createSPT(imageURL, prompt, description, selectedModel,price )
+        const tx = await market.connect(signer).createSPT(imageURL, prompt, params, description, selectedModel,price )
         const receipt = await tx.wait();
         
         console.log(receipt);
+        window.location.reload(); // リロードし直す
 
     }
 
@@ -86,7 +91,7 @@ export default function Upload() {
     return(
         <div className="max-w-lg mx-auto my-8 p-6  rounded-lg">
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className="mb-8">
                     {/* <label className="text-gray-200 font-bold mb-2" htmlFor="file">
                         Choose a file to upload
                     </label> */}
@@ -159,20 +164,14 @@ export default function Upload() {
                 </div>
             )} */}
             
-            {tokenURI&& (
+            {/* IPFS へのアップロードが完了したら */}
+            {/* {tokenURI&& (
                 <div className="mt-8">
                     <p className="ext-gray-700 font-bold"> File Uploaded to IPFS:</p>
-                    {/* <a 
-                        href={ipfsURL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-700">
-                        {ipfsURL}
-                    </a> */}
+
                     <Image width="500" height="500" src={tokenURI} alt={tokenURI} ></Image>
                 </div>
-                
-            )}
+            )} */}
         </div>
     )
 

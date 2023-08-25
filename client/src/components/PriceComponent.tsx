@@ -26,10 +26,12 @@ const PriceComponent = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-row space-x-4">
       <input onChange={handleChange} type="text" className="w-300  p-2 border rounded bg-pbr-purple text-left" required/><br/>
-      <i>Commission(10%): {(Number.parseFloat(price)*0.1)} ETH</i><br />
-      <i>Your Benefit: {(Number.parseFloat(price)*0.9)} ETH</i><br />
+      <div>
+        <i>Commission(10%): {(Number.parseFloat(price)*0.1)} ETH</i><br />
+        <i>Your Benefit: {(Number.parseFloat(price)*0.9)} ETH</i><br />
+      </div>
     </div>
   );
 }

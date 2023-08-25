@@ -34,6 +34,7 @@ async function main() {
             const publisher = account1;
             const tokenURI = "http://sampleurl.co.jp";
             const prompt = "This is a test prompt";
+            const params = "Test Params";
             const description = "Test description";
             const model = "gpt3.5-turbo";
             const price = ethers.parseUnits("1");
@@ -41,6 +42,7 @@ async function main() {
             const tx = await market.connect(publisher).createSPT(
                 tokenURI,
                 prompt,
+                params,
                 description,
                 model,
                 price
@@ -71,6 +73,7 @@ async function main() {
                 const publisher = account1;
                 const tokenURI = "http://sampleurl.co.jp";
                 const prompt = "This is a test prompt";
+                const params = "Test Params";
                 const description = "Test description";
                 const model = "gpt3.5-turbo";
                 const price = ethers.parseUnits("1");
@@ -78,6 +81,7 @@ async function main() {
                 const tx1 = await market.connect(publisher).createSPT(
                     tokenURI,
                     prompt,
+                    params,
                     description,
                     model,
                     price
@@ -87,6 +91,7 @@ async function main() {
                 // 
                 const id = 0;
                 const new_prompt = "New Prompt";
+                const new_params = "New params";
                 const new_description = "New Description";
                 const new_model = "gpt4";
                 const new_price = ethers.parseUnits("11");
@@ -94,6 +99,7 @@ async function main() {
                     id,
                     tokenURI,
                     new_prompt,
+                    new_params,
                     new_description,
                     new_model,
                     new_price,
@@ -112,6 +118,7 @@ async function main() {
                 const publisher = account1;
                 const tokenURI = "http://sampleurl.co.jp";
                 const prompt = "This is a test prompt";
+                const params = "Test Params";
                 const description = "Test description";
                 const model = "gpt3.5-turbo";
                 const price = ethers.parseUnits("1");
@@ -119,6 +126,7 @@ async function main() {
                 const tx1 = await market.connect(publisher).createSPT(
                     tokenURI,
                     prompt,
+                    params,
                     description,
                     model,
                     price
@@ -128,6 +136,7 @@ async function main() {
                 // 
                 const id = 0;
                 const new_prompt = "New Prompt";
+                const new_params = "New Params";
                 const new_description = "New Description";
                 const new_model = "gpt4";
                 const new_price = ethers.parseUnits("11");
@@ -135,6 +144,7 @@ async function main() {
                     id,
                     tokenURI,
                     new_prompt,
+                    new_params,
                     new_description,
                     new_model,
                     new_price,
@@ -147,6 +157,7 @@ async function main() {
                 expect(args.id).to.equal(0);
                 expect(args.tokenURI).to.equal(tokenURI);
                 expect(args.prompt).to.equal(new_prompt);
+                expect(args.params).to.eq(new_params);
                 expect(args.description).to.equal(new_description);
                 expect(args.model).to.eq(new_model);
                 expect(args.price).to.eq(new_price);
@@ -164,6 +175,7 @@ async function main() {
             const buyer = account2;
             const tokenURI = "http://sampleurl.co.jp";
             const prompt = "This is a test prompt for item1";
+            const params = "Test Params";
             const description = "Description for item1";
             const model = "gpt3.5-turbo";
             const price = ethers.parseUnits("1");
@@ -171,6 +183,7 @@ async function main() {
             const tx1 = await market.connect(publisher).createSPT(
                 tokenURI,
                 prompt,
+                params,
                 description,
                 model,
                 price
@@ -181,8 +194,9 @@ async function main() {
             // 購入する
             const tx2 = await market.connect(buyer).buySPT(0, { value: price});
             await tx2.wait();
-            const retrievedPrompt = await market.connect(buyer).showPrompt(0);
+            const [retrievedPrompt, retrievedParams] = await market.connect(buyer).showPromptParams(0);
             expect(retrievedPrompt).to.eq(prompt);
+            expect(retrievedParams).to.eq(params);
         });
 
         describe("showPrompt", function () {
@@ -193,6 +207,7 @@ async function main() {
                 const publisher = account1;
                 const tokenURI = "http://sampleurl.co.jp";
                 const prompt = "This is a test prompt";
+                const params = "Test Params";
                 const description = "Test description";
                 const model = "gpt3.5-turbo";
                 const price = ethers.parseUnits("1");
@@ -200,6 +215,7 @@ async function main() {
                 const tx1 = await market.connect(publisher).createSPT(
                     tokenURI,
                     prompt,
+                    params,
                     description,
                     model,
                     price
@@ -207,7 +223,7 @@ async function main() {
                 await tx1.wait();
 
                 const id = 0;
-                const tx2 =  market.connect(account3).showPrompt(id);
+                const tx2 =  market.connect(account3).showPromptParams(id);
                 await expect(tx2).to.be.revertedWith(
                     "onlyOwners: Only owners can access to this method"
                 );
@@ -222,6 +238,7 @@ async function main() {
 
                 const tokenURI = "http://sampleurl.co.jp";
                 const prompt = "This is a test prompt";
+                const params = "Test Params";
                 const description = "Test description";
                 const model = "gpt3.5-turbo";
                 const price = ethers.parseUnits("1");
@@ -229,6 +246,7 @@ async function main() {
                 const tx1 = await market.connect(publisher).createSPT(
                     tokenURI,
                     prompt,
+                    params,
                     description,
                     model,
                     price
@@ -240,8 +258,9 @@ async function main() {
                 const tx2 = await market.connect(buyer).buySPT(id, { value: price} );
                 await tx2.wait();
 
-                const returned_prompt = await market.connect(buyer).showPrompt(id);
+                const [returned_prompt, returned_params] = await market.connect(buyer).showPromptParams(id);
                 expect(returned_prompt).to.eq(prompt);
+                expect(returned_params).to.eq(params);
             });
         });
     });
@@ -258,6 +277,7 @@ async function main() {
             // 1. createSPT
             const tokenURI = "http://sampleurl.co.jp";
             const prompt = "This is a test prompt";
+            const params = "Test Params"
             const description = "Test description";
             const model = "gpt3.5-turbo";
             const price = ethers.parseUnits("1");
@@ -265,6 +285,7 @@ async function main() {
             const tx1 = await market.connect(publisher).createSPT(
                 tokenURI,
                 prompt,
+                params,
                 description,
                 model,
                 price
