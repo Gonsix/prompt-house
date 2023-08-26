@@ -2,12 +2,13 @@
 import { useState, CSSProperties, useRef } from 'react';
 import { NFTStorage } from 'nft.storage';
 import { ipfsToHTTPS } from '@/utils';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { useContext } from "react";
 import { SPTContext } from "@/components/SellPage";
 
 
 import { ethers} from "ethers";
+
 import SPTMarketABI from "../../../hardhat/artifacts/contracts/SPTMarket.sol/SPTMarket.json";
 import SPTMarket from "../../../hardhat/contractAddress.json";
 
