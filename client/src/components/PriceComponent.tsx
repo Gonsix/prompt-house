@@ -17,7 +17,6 @@ const PriceComponent = () => {
         digit = 0;
       }
       setPrice(parseFloat(event.target.value).toString());
-      console.log(digit);
     }else{
         setPrice("0");
         event.target.value = '';

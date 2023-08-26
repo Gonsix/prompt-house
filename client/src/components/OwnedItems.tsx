@@ -61,27 +61,30 @@ function OwnedItems() {
                 <div className="text-2xl font-bold" >Owned Items ({ownedItems.length})</div>
 
             </div>
-            { ownedItems.length !== 0 ? 
+            <div>
 
-            
-            <Splide
-            options={{
-                autoplay: true,
-                perPage : 6,
-                interval: 3000
-            }}>
-            {ownedItems.reverse().map( (item : ItemInfoType, index: number)  => {
+                { ownedItems.length !== 0 ? 
+                
+                <Splide
+                    options={{
+                        autoplay: true,
+                        perPage : 6,
+                        interval: 3000
+                    }}>
+                    {ownedItems.reverse().map( (item : ItemInfoType, index: number)  => {
 
-                return (
-                    <SplideSlide key={index}>
-                        <ItemCard src={item.tokenURI} id={item.id} />
-                    </SplideSlide>          
-                )
-            })}
+                        return (
+                            <SplideSlide key={index}>
+                                <ItemCard src={item.tokenURI} id={item.id} height={256} width={256}/>
+                            </SplideSlide>          
+                        )
+                    })}
 
-        </Splide> 
-        : <div></div>
-        }
+                </Splide> 
+                : <div></div>
+                }
+            </div>
+
 
         </div>
     );

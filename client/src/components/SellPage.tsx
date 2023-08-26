@@ -60,7 +60,7 @@ export default function SellPage() {
             <div className="flex-grow flex">
                 <div className="flex-grow">
                   <div className="flex flex-col">
-                    <div className="fixed">
+                    <div className="">
                       <Upload/> 
                     </div>
                     {/* <div>

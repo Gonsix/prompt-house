@@ -15,11 +15,11 @@ function OwnedPage() {
 
 
     return (
-        <div className="flex flex-col h-screen">
-            <div className="flex flex-grow h-1/3">
+        <div className="flex flex-col space-y-12">
+            <div className="min-h-56 mb-4">
                 <OwnedItems/>
             </div>
-            <div className="flex flex-grow h-2/3">
+            <div className="min-h-56">
                 <PublishedItems/>
             </div>
 

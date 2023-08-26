@@ -142,22 +142,6 @@ export default function Upload() {
                 
             </form>
 
-            {/* {localURL && !ipfsURL && (
-                <div className="mt-8">
-                    <p className="ext-gray-700 font-bold">Selected File Preview:</p>
-                    <Image width="500" height="500" src={localURL} alt="Selected File Preview" />
-                </div>
-            )} */}
-            
-            {/* IPFS へのアップロードが完了したら */}
-            {/* {tokenURI&& (
-                <div className="mt-8">
-                    <p className="ext-gray-700 font-bold"> File Uploaded to IPFS:</p>
-
-                    <Image width="500" height="500" src={tokenURI} alt={tokenURI} ></Image>
-                </div>
-            )} */}
-
 {uploading 
                 ? <button disabled type="submit" className="py-3  w-25 px-5 mr-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center">
                     <svg aria-hidden="true" role="status" className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

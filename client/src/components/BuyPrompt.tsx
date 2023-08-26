@@ -36,7 +36,8 @@ export default function BuyPromptForm({id}:{id:string}) {
 
         const MARKET_ADDRESS = SPTMarket.address;
         const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
-        const tx = await market.connect(signer).buySPT(id, BigNumber.from(price));
+        // console.log(price.toString());
+        const tx = await market.connect(signer).buySPT(id, {value: BigNumber.from(price)});
         console.log(tx);
 
         setBuying(false);
