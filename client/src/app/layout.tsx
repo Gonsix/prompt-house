@@ -18,14 +18,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">      
-      <body className="center">
+    <html lang="en" >      
+      <body className=" center w-full h-auto">
         <main>    
           <ThirdwebProvider activeChain={Sepolia}>
             <div className='mb-12'>
               <Header/>
             </div>
             {children}
+
             <div className='mt-12'>
               <Footer/>
             </div>

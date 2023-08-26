@@ -1,11 +1,9 @@
 "use client"
-import { ethers } from "ethers"
+import { items_discriptions } from '@/lib/items_discriptions';
+import ShowImg from "@/components/ShowImg";
 import { useState, createContext, useContext, ContextType } from "react";
-import Upload from "@/components/Upload"
-import Published from "@/components/PublishedItems"
-import PromptForm from "@/components/PromptForm"
+import BuyPrompt from "@/components/BuyPrompt"
 import React from "react";
-import PriceComponent from "./PriceComponent";
 
 // Context 増やす時
 type SPTContextType = {
@@ -25,14 +23,11 @@ type SPTContextType = {
 
 export const SPTContext = createContext({} as SPTContextType) ;
 
-
-
-export default function SellPage() {
-
+function Page({id} : {id : string} ) {
 
     const [prompt, setPrompt] = useState<string>('');
     const [params, setParams] = useState<string>('');
-    const [selectedModel, setSelectedModel] = useState<string>('Stable Diffution');
+    const [selectedModel, setSelectedModel] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [price, setPrice] = useState('');
     const [tokenURI, setTokenURI]  = useState<string>('');
@@ -52,48 +47,21 @@ export default function SellPage() {
         tokenURI : tokenURI,
         setTokenURI: setTokenURI
     };
-
-
-  return (
-    <div className="flex-grow flex-col">
+    return (
         <SPTContext.Provider value={SPTcontextValue}>
-            <div className="flex-grow flex">
-                <div className="flex-grow">
-                  <div className="flex flex-col">
-                    <div className="fixed">
-                      <Upload/> 
+            <div className="w-screen flex-grow flex">
+                <div className="flex-grow-col w-2/5">
+                    <div className="space-y-10">
+                        <ShowImg id={id} /> 
                     </div>
-                    {/* <div>
-                        <div>
-
-                          <a className="font-bold mb-2">Price</a>
-                          <PriceComponent/>
-                        </div>
-                    </div> */}
-
-                  </div>
                 </div>
-                <div className="object-right flex-grow-col">
-                <PromptForm />
+
+                <div className="object-right flex-grow-col w-1/2">
+                    <BuyPrompt id={id} />
                 </div>
             </div>
         </SPTContext.Provider>
-
-      <div className="">
-        <Published/>
-        <br/>
-        <br/><br/><br/><br/><br/><br/><br/>
-      </div>
-
-
-      {/* <div>{selectedModel}</div> */}
-      {/* <div>{description}</div>
-      <div>{price}</div> */}
-    </div>
-
-
-
-    
-
-  )
+    );
 }
+
+export default Page;

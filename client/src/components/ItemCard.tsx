@@ -13,6 +13,7 @@ interface ItemCardProps {
 const ItemCard: React.FC<ItemCardProps> = ({ src, id, height = 205, width = 205 }) => {
     return (
         <>
+
             <Link href={`/items/${id}`}>
                 <div className='transition-transform transform hover:scale-110'>
                     <Image 
