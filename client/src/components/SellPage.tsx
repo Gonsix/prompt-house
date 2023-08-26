@@ -2,7 +2,7 @@
 import { ethers } from "ethers"
 import { useState, createContext, useContext, ContextType } from "react";
 import Upload from "@/components/Upload"
-import Published from "@/components/Published"
+import Published from "@/components/PublishedItems"
 import PromptForm from "@/components/PromptForm"
 import React from "react";
 import PriceComponent from "./PriceComponent";

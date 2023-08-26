@@ -1,18 +1,17 @@
 "use client"
-import Image from 'next/image';
-import React, { Component } from 'react';
-import { useEffect, useState, createContext } from 'react';
-
-import { ethers } from 'ethers';
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import '@splidejs/splide/css'; 
-
-import ItemCard from './ItemCard';
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
 
 import SPTMarketABI from "../../../hardhat/artifacts/contracts/SPTMarket.sol/SPTMarket.json";
 import SPTMarket from "../../../hardhat/contractAddress.json";
 
-export default function HomePageDown() {
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import '@splidejs/splide/css'; 
+
+import ItemCard from "./ItemCard";
+
+
+function OwnedItems() {
 
     type ItemInfoType = { // prompt とparams 以外の情報
         id : number,
@@ -25,7 +24,7 @@ export default function HomePageDown() {
         isCanceled : boolean
     }
 
-    const [items, setItems ]  = useState<ItemInfoType[]>([]);
+    const [ownedItems, setOwnedItems ]  = useState<ItemInfoType[]>([]);
     
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -36,33 +35,41 @@ export default function HomePageDown() {
     // SPTMarketContract から現在のマーケットに出品されているアイテムのid を取ってくる.
 
     useEffect(() => {
-        const fetchItems = async () => {
+        const fetchOwnedItems = async () => {
 
         
-            const listed_ids = await market.connect(signer).getListingSPT();
+            let ownedItems_ids = await market.connect(signer).getOwnedSPTids();
 
-            const fetchedItems = await Promise.all(listed_ids.map(async (id: number)=>{
+            ownedItems_ids =  ownedItems_ids.filter( function(id : number){
+                return id > 0;
+              })
+
+            const ownedItems = await Promise.all(ownedItems_ids.map(async (id: number)=>{
                 const itemInfo =  await market.getSPTInfo(id);
                 return itemInfo;
             }));
-            setItems(fetchedItems);
+            setOwnedItems(ownedItems);
         };
 
-        fetchItems();
+        fetchOwnedItems();
     }, []);
 
+    return (
+        <div>
+            <div className="mb-8">
+                <div className="text-2xl font-bold" >Owned Items ({ownedItems.length})</div>
 
-  
-  return (
-    <>
-        <div className="text-2xl font-semibold mb-4 "> Newest Items</div>
-        <Splide
+            </div>
+            { ownedItems.length !== 0 ? 
+
+            
+            <Splide
             options={{
                 autoplay: true,
                 perPage : 6,
                 interval: 3000
             }}>
-            {items.reverse().map( (item : ItemInfoType, index: number)  => {
+            {ownedItems.reverse().map( (item : ItemInfoType, index: number)  => {
 
                 return (
                     <SplideSlide key={index}>
@@ -71,8 +78,12 @@ export default function HomePageDown() {
                 )
             })}
 
-        </Splide>
-    </>
-    )
-  }
-  
+        </Splide> 
+        : <div></div>
+        }
+
+        </div>
+    );
+}
+
+export default OwnedItems;

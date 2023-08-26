@@ -8,9 +8,9 @@ import HomePageDown from './HomePageDown'
 export default function HomePage() {
     
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className=" flex flex-col">
             {/* 上部の領域 (全体の60%) */}
-            <div className="flex flex-row flex-grow h-1/2">
+            <div className="flex flex-row flex-grow h-1/2 space-x-12">
                 {/* 左側の領域 */}
                 <div className="w-1/2 space-y-8 ">
                     <span className="text-6xl font-bold mb-8 space-y-2 bg-gradient-to-r from-red-300 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">
@@ -41,7 +41,7 @@ export default function HomePage() {
             </div>
             
             {/* 下部の領域 (全体の40%) */}
-            <div className="flex-grow">
+            <div className="flex-grow h-1/2">
                 <HomePageDown/>
             </div>
         </div>

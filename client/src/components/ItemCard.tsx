@@ -10,11 +10,11 @@ interface ItemCardProps {
     width?: number
 }
 
-const ItemCard: React.FC<ItemCardProps> = ({ src, id, height = 256, width = 256 }) => {
+const ItemCard: React.FC<ItemCardProps> = ({ src, id, height = 205, width = 205 }) => {
     return (
         <>
             <Link href={`/items/${id}`}>
-                <div className='transition-transform transform hover:scale-105'>
+                <div className='transition-transform transform hover:scale-110'>
                     <Image 
                     src={src} 
                     alt="Image" 
@@ -23,7 +23,6 @@ const ItemCard: React.FC<ItemCardProps> = ({ src, id, height = 256, width = 256 
                     className="transition-filter hover:brightness-180 rounded-md" 
                     />
                 </div>
-
             </Link>
         </>
     );

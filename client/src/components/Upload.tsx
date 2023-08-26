@@ -10,6 +10,7 @@ import { ethers } from "ethers";
 import { Marketplace } from '@thirdweb-dev/sdk';
 import SPTMarketABI from "../../../hardhat/artifacts/contracts/SPTMarket.sol/SPTMarket.json";
 import SPTMarket from "../../../hardhat/contractAddress.json";
+import NextNprogress from "nextjs-progressbar";
 
 export default function Upload() {
     const [file, setFile] = useState(null);

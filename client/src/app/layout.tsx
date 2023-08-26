@@ -1,4 +1,3 @@
-// "use client"
 import './globals.css'
 import type { Metadata } from 'next'
 
@@ -6,7 +5,6 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ThirdwebProvider } from '@/components/ThirdwebProvider';
 import {Sepolia} from "@thirdweb-dev/chains";
-
 
 
 export const metadata: Metadata = {
@@ -27,9 +25,8 @@ export default function RootLayout({
             <div className='mb-12'>
               <Header/>
             </div>
-
             {children}
-            <div className='mt-4'>
+            <div className='mt-12'>
               <Footer/>
             </div>
           </ThirdwebProvider>
