@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Footer() {
 
   return (
-    <footer>
+    <footer className='pt-8'>
       <p className="copyright">
         <span>©</span>
         <span>PromptHouse</span>

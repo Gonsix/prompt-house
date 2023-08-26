@@ -1,15 +1,10 @@
 "use client"
-import ItemPage from "@/components/ItemPage";
+import BuyPage from "@/components/BuyPage";
 
-
-function Page({params}: {params: {id : string}}) {
-
-
-    return (
-        <div>
-            <ItemPage id={params.id}/>
-        </div>
-    );
+export default function Page({ params: { id } }: { params: { id: string } }) {
+  return (
+    <>
+      <BuyPage id={id}/>
+    </>
+  )
 }
-
-export default Page;

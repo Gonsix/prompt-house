@@ -20,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">      
-      <body className="center">
+    <html lang="en" >      
+      <body className=" center w-full h-auto">
         <main>    
           <ThirdwebProvider activeChain={Sepolia}>
             <div className='mb-12'>
@@ -29,8 +29,8 @@ export default function RootLayout({
             </div>
 
             {children}
-            <div className='mt-4'>
-              <Footer/>
+            <div className='clear-both'>
+              <Footer />
             </div>
           </ThirdwebProvider>
         </main>

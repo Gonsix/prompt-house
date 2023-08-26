@@ -1,21 +1,23 @@
 "use client"
 
-import ModelSelectComponent from "./ModelSelectComponent";
 import PromptInputForm from "./PromptInputForm";
-import ResizableDescriptionForm from "./ResizableDescriptionForm";
-import PriceComponent from "./PriceComponent";
+import BuyResizableDescriptionForm from "./BuyResizableDescriptionForm";
+import BuyPriceComponent from "./BuyPriceComponent";
 import ResizableParametersForm from "./ResizableParametersForm";
 
-import { useState, CSSProperties, useRef } from 'react';
-import { useContext } from "react";
-import { SPTContext } from "@/components/SellPage";
+import { ethers, BigNumber } from "ethers";
+import SPTMarketABI from "../../../hardhat/artifacts/contracts/SPTMarket.sol/SPTMarket.json";
+import SPTMarket from "../../../hardhat/contractAddress.json";
 
-export default function PromptForm() {
+import { useState, CSSProperties, useRef, FormEvent } from 'react';
+import { useContext } from "react";
+import { SPTContext } from "@/components/BuyPage";
+
+export default function BuyPromptForm({id}:{id:string}) {
     const [file, setFile] = useState(null);
-    const [uploading, setUploading] = useState<boolean>(false);
     const [localURL, setLocalURL] = useState<string>();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-
+    const [buying, setBuying] = useState<boolean>(false);
     const {
         tokenURI, setTokenURI,
         prompt, setPrompt,
@@ -25,30 +27,45 @@ export default function PromptForm() {
         price, setPrice,
     } = useContext(SPTContext);
 
+    const handleSubmit = async (event:any)=>
+    {
+        setBuying(true);
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        const MARKET_ADDRESS = SPTMarket.address;
+        const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
+        const tx = await market.connect(signer).buySPT(id, BigNumber.from(price));
+        console.log(tx);
+
+        setBuying(false);
+    }
+
     return (
-        <div className="space-y-10">
+        <div className="space-y-10 w-full">
             <h1 className="text-4xl font-bold mb-8 ">Prompt Details</h1>
-            <div> Tell us about the prompt you want to sell.</div>
+            <div> You CAN NOT see the prompt until you buy this.</div>
             <div className="space-y-2">
                 <a className="font-bold">Prompt Types</a>
                 <div className="text-gray-400">Select the type of prompt you want to sell</div>
-                <ModelSelectComponent />
+                <input type='text' disabled value={selectedModel ? selectedModel : "Loading data..."}  className="text-white font-mono bg-pbr-purple p-2 rounded-lg" />
             </div>
 
 
             <div className="space-y-2">
                 <a className="font-bold">Description</a>
                 <div className="text-gray-400">Describe what your prompt does to a potential buyer. A more detailed description will increase your sales.</div>
-                <ResizableDescriptionForm />
+                <BuyResizableDescriptionForm />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 hidden">
                 <a className="font-bold">Prompt</a>
                 <div className="text-gray-400">Please enter your prompt.</div>
                 <PromptInputForm />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 hidden">
                 <a className="font-bold">Parameters</a>
                 <div className="text-gray-400">Give a parameters info.</div>
                 <ResizableParametersForm />
@@ -56,10 +73,10 @@ export default function PromptForm() {
 
             <div>
                 <a className="font-bold mb-2">Price</a>
-                <PriceComponent/>
+                <BuyPriceComponent/>
             </div>
-
-            {uploading 
+            
+            {buying 
                 ? <button disabled type="submit" className="py-3  w-25 px-5 mr-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center">
                     <svg aria-hidden="true" role="status" className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -67,16 +84,18 @@ export default function PromptForm() {
                     </svg>
                     Loading...
                 </button>
-                :<button
-
+                :
+                <button
                     type="submit"
+                    onClick={handleSubmit}
                     className="py-2.5  w-32 px-3 mr-2 text-xl font-medium bg-gradient-to-br  from-yellow-500 to-red-400 text-white  rounded-lg focus:outline-none focus:shadow-outline hover:from-yellow-400 hover:to-orange-400"
-                    disabled={!file || !prompt || !description || !price }
                     >
-                        {uploading ? 'Creating...' : 'Create'}    
+                    Buy  
                 </button>
 
                 }
+                
+
 
         </div>
         )
