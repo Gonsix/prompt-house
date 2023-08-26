@@ -26,16 +26,17 @@ export default function PublishedItems() {
 
   const [publishedItems, setPublishedItems ]  = useState<ItemInfoType[]>([]);
       
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
 
-  const MARKET_ADDRESS = SPTMarket.address;
-  const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
 
   // SPTMarketContract から現在のマーケットに出品されているアイテムのid を取ってくる.
 
   useEffect(() => {
       const fetchPublishedItems = async () => {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const signer = provider.getSigner();
+        
+          const MARKET_ADDRESS = SPTMarket.address;
+          const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
 
       
           let publishedItems_ids : number[] = await market.connect(signer).getPublishedSPTids();

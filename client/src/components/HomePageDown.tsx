@@ -27,16 +27,17 @@ export default function HomePageDown() {
 
     const [items, setItems ]  = useState<ItemInfoType[]>([]);
     
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
 
-    const MARKET_ADDRESS = SPTMarket.address;
-    const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
 
     // SPTMarketContract から現在のマーケットに出品されているアイテムのid を取ってくる.
 
     useEffect(() => {
         const fetchItems = async () => {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+        
+            const MARKET_ADDRESS = SPTMarket.address;
+            const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
 
         
             const listed_ids = await market.connect(signer).getListingSPT();

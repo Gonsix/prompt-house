@@ -25,17 +25,18 @@ function OwnedItems() {
     }
 
     const [ownedItems, setOwnedItems ]  = useState<ItemInfoType[]>([]);
-    
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
 
-    const MARKET_ADDRESS = SPTMarket.address;
-    const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
 
     // SPTMarketContract から現在のマーケットに出品されているアイテムのid を取ってくる.
 
     useEffect(() => {
         const fetchOwnedItems = async () => {
+    
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+        
+            const MARKET_ADDRESS = SPTMarket.address;
+            const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
 
         
             let ownedItems_ids = await market.connect(signer).getOwnedSPTids();

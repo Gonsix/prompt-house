@@ -29,12 +29,7 @@ export const SPTContext = createContext({} as SPTContextType) ;
 
 export default function SellPage() {
 
-  // const handleClick = async function () {
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const signer = provider.getSigner();
-  //   console.log("already connected");
 
-  // }
     const [prompt, setPrompt] = useState<string>('');
     const [params, setParams] = useState<string>('');
     const [selectedModel, setSelectedModel] = useState<string>('Stable Diffution');
