@@ -1,13 +1,6 @@
 import React from "react";
-import { useContext } from "react";
-import { SPTContext } from "@/components/BuyPage";
 
-
-
-
-const ResizableDescriptionForm = () =>{
-
-    const { description, setDescription } = useContext(SPTContext);
+const ResizableDescriptionForm = ({description}: {description:string}) =>{
 
     return (
         <div className="flex">

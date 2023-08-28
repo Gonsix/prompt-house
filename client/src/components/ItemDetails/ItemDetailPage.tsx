@@ -1,9 +1,10 @@
 "use client"
-import { items_discriptions } from '@/lib/items_discriptions';
-import ShowImg from "@/components/ShowImg";
-import { useState, createContext, useContext, ContextType } from "react";
-import BuyPrompt from "@/components/BuyPrompt"
 import React from "react";
+import { items_discriptions } from '@/lib/items_discriptions';
+import { useState, createContext, useContext, ContextType } from "react";
+
+import ItemDetailPageLeft from "@/components/ItemDetails/ItemDetailPageLeft";
+import PromptForm from "@/components/ItemDetails/PromptForm";
 
 // Context 増やす時
 type SPTContextType = {
@@ -23,7 +24,7 @@ type SPTContextType = {
 
 export const SPTContext = createContext({} as SPTContextType) ;
 
-function Page({id} : {id : string} ) {
+function BuyPage({id} : {id : string}) {
 
     const [prompt, setPrompt] = useState<string>('');
     const [params, setParams] = useState<string>('');
@@ -49,19 +50,19 @@ function Page({id} : {id : string} ) {
     };
     return (
         <SPTContext.Provider value={SPTcontextValue}>
-            <div className="w-screen flex-grow flex">
-                <div className="flex-grow-col w-2/5">
+            <div className="flex-grow-row flex">
+                <div className="w-2/5">
                     <div className="space-y-10">
-                        <ShowImg id={id} /> 
+                        <ItemDetailPageLeft id={id} /> 
                     </div>
                 </div>
 
-                <div className="object-right flex-grow-col w-1/2">
-                    <BuyPrompt id={id} />
+                <div className="object-right w-3/5">
+                    <PromptForm id={id} />
                 </div>
             </div>
         </SPTContext.Provider>
     );
 }
 
-export default Page;
+export default BuyPage;

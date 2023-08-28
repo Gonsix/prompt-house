@@ -1,10 +1,10 @@
 "use client"
-import BuyPage from "@/components/BuyPage";
+import ItemDetailPage from "@/components/ItemDetails/ItemDetailPage";
 
 export default function Page({ params: { id } }: { params: { id: string } }) {
   return (
     <>
-      <BuyPage id={id}/>
+      <ItemDetailPage id={id}/>
     </>
   )
 }

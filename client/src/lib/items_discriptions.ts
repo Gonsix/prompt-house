@@ -1,107 +1,62 @@
 export type Item = {
-    name: string;
-    slug: string;
-    description?: string;
-  };
+  name: string;
+  description?: string;
+};
   
-  export const items_discriptions: { name: string; items: Item[] }[] = [
+  export const items_discriptions : { pageType: string; title: string; title_Dscription : string ; items: Item[]; }[] = [
     {
-      name: 'Buy',
+      pageType : 'buy',
+      title : 'Prompt Details',
+      title_Dscription : 'You can see this item\'s prompt after you buy',
       items: [
         {
-          name: 'Nested Layouts',
-          slug: 'layouts',
+          name: 'Prompt Type',
           description: 'Create UI that is shared across routes',
         },
         {
-          name: 'Grouped Layouts',
-          slug: 'route-groups',
+          name: 'Prompt',
+          description: '',
+        },
+        {
+          name: 'Parameters',
+          description: '',
+        },
+        {
+          name: 'Description',
           description: 'Organize routes without affecting URL paths',
         },
         {
-          name: 'Parallel Routes',
-          slug: 'parallel-routes',
+          name: 'Price',
           description: 'Render multiple pages in the same layout',
         },
       ],
     },
     {
-      name: 'Sell',
+      pageType: 'owned',
+      title : 'Prompt Details [Owned]',
+      title_Dscription : 'You are one of this prompt\'s owners.',
       items: [
         {
-          name: 'Loading',
-          slug: 'loading',
-          description:
-            'Create meaningful Loading UI for specific parts of an app',
+          name: 'Prompt Type',
+          description: '',
         },
         {
-          name: 'Error',
-          slug: 'error-handling',
-          description: 'Create Error UI for specific parts of an app',
+          name: 'Prompt',
+          description: '',
         },
         {
-          name: 'Not Found',
-          slug: 'not-found',
-          description: 'Create Not Found UI for specific parts of an app',
+          name: 'Parameters',
+          description: '',
+        },
+        {
+          name: 'Description',
+          description: '',
+        },
+        {
+          name: 'Price',
+          description: '',
         },
       ],
-    },
-    {
-      name: 'Edit',
-      items: [
-        {
-          name: 'Streaming with Suspense',
-          slug: 'streaming',
-          description:
-            'Streaming data fetching from the server with React Suspense',
-        },
-        {
-          name: 'Static Data',
-          slug: 'ssg',
-          description: 'Generate static pages',
-        },
-        {
-          name: 'Dynamic Data',
-          slug: 'ssr',
-          description: 'Server-render pages',
-        },
-        {
-          name: 'Incremental Static Regeneration',
-          slug: 'isr',
-          description: 'Get the best of both worlds between static & dynamic',
-        },
-      ],
-    },
-    {
-      name: 'Components',
-      items: [
-        {
-          name: 'Client Context',
-          slug: 'context',
-          description:
-            'Pass context between Client Components that cross Server/Client Component boundary',
-        },
-      ],
-    },
-    {
-      name: 'Misc',
-      items: [
-        {
-          name: 'Client Component Hooks',
-          slug: 'hooks',
-          description: 'Preview the routing hooks available in Client Components',
-        },
-        {
-          name: 'CSS and CSS-in-JS',
-          slug: 'styling',
-          description: 'Preview the supported styling solutions',
-        },
-        {
-          name: 'Code Snippets',
-          slug: 'snippets',
-          description: 'A collection of useful App Router code snippets',
-        },
-      ],
-    },
+    }
   ];
   

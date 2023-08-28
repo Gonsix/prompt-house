@@ -1,11 +1,8 @@
 import React from "react";
 import { useContext } from "react";
-import { SPTContext } from "@/components/BuyPage";
 import { ethers } from "ethers";
 
-
-const PriceComponent = () => {
-  const { price, setPrice } = useContext(SPTContext);
+const PriceComponent = ({price} : {price:string}) => {
 
   return (
     <div className="flex flex-row space-x-4">
