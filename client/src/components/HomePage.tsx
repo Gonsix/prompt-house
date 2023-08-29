@@ -18,10 +18,13 @@ export default function HomePage() {
                         <br/>
                         <span>Prompt MarketPlace</span>
                     </span>
-                    <div className="mb-8">
+                    <div className="mb-8 space-y-4">
                         <span className="text-4xl ">
                             DALL・E, Midjourney, Stable Diffusion 🪄
                         </span>
+                        <div className="text-gray-300 text-xl flex">
+                            First Connect Your wallet🦊 to <div className="text-green-500 inline px-2"> Sepolia </div> network
+                        </div>
                     </div>
 
                     <div className="flex flex-row space-x-2 mt-6">
