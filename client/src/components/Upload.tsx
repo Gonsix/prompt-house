@@ -60,8 +60,6 @@ export default function Upload() {
 
         setTokenURI(imageURL); // すぐには更新されない
 
-        setUploading(false);
-
         ////// ethers.js で createSPT //////
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
@@ -71,6 +69,7 @@ export default function Upload() {
         const tx = await market.connect(signer).createSPT(imageURL, prompt, params, description, selectedModel, ethers.utils.parseUnits(price))
         const receipt = await tx.wait();
         
+        setUploading(false);
         console.log(receipt);
         window.location.reload(); // リロードし直す
 
