@@ -5,6 +5,7 @@ import PromptInputForm from "./PromptInputForm";
 import ResizableDescriptionForm from "./ResizableDescriptionForm";
 import PriceComponent from "./PriceComponent";
 import ResizableParametersForm from "./ResizableParametersForm";
+import {networkInfo} from '@/lib/networkInfo';
 
 import { useState, CSSProperties, useRef } from 'react';
 import { useContext } from "react";
@@ -55,12 +56,10 @@ export default function PromptForm() {
             </div>
 
             <div>
-                <a className="font-bold mb-2">Price</a>
-                <PriceComponent/>
+                <a className="font-bold mb-2">Price ({networkInfo[0].symbol})</a>
+                <PriceComponent symbol={networkInfo[0].symbol}/>
             </div>
-
-
-
+            
         </div>
         )
     }

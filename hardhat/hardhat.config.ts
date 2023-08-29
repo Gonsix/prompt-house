@@ -1,19 +1,20 @@
-import { HardhatUserConfig } from "hardhat/config";
-import "dotenv/config";
-import "@nomicfoundation/hardhat-toolbox";
+require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config();
 
-const SEPOLIA_URL = process.env.SEPOLIA_URL as string;
-const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
+/** @type import('hardhat/config').HardhatUserConfig */
 
-const config: HardhatUserConfig = {
-  solidity: "0.8.19",
+module.exports = {
   networks: {
-    sepolia: {
-      url: SEPOLIA_URL,
-      accounts: [PRIVATE_KEY]
+    hardhat: {
     },
+    polygon_mumbai: {
+      url: "https://mumbai.rpc.thirdweb.com",
+      accounts: [process.env.KOME_PRIVATE_KEY]
+    },
+    polygonzkEvm: {
+      url: "https://rpc.public.zkevm-test.net",
+      accounts: [process.env.KOME_PRIVATE_KEY]
+    }
   },
-};
-
-
-export default config;
+   solidity: "0.8.19",
+}

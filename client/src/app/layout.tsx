@@ -1,10 +1,11 @@
-import './globals.css'
-import type { Metadata } from 'next'
+import './globals.css';
+import type { Metadata } from 'next';
+import {networkInfo} from '@/lib/networkInfo';
 
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ThirdwebProvider } from '@/components/ThirdwebProvider';
-import {Sepolia} from "@thirdweb-dev/chains";
+import {Sepolia, Mumbai} from "@thirdweb-dev/chains";
 
 
 export const metadata: Metadata = {
@@ -21,12 +22,12 @@ export default function RootLayout({
     <html lang="en" >      
       <body className=" center w-full h-auto">
         <main>    
-          <ThirdwebProvider activeChain={Sepolia}>
+          <ThirdwebProvider activeChain={networkInfo[0].activeChain == 'Polygon'? Mumbai : Sepolia}>
             <div className='mb-12'>
               <Header/>
             </div>
             {children}
-
+            
             <div className='mt-12'>
               <Footer/>
             </div>

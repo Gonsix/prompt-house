@@ -13,6 +13,7 @@ import SPTMarket from "../../../../hardhat/contractAddress.json";
 import { useEffect,useState, CSSProperties, useRef, FormEvent } from 'react';
 import { useContext } from "react";
 import { SPTContext } from "@/components/ItemDetails/ItemDetailPage";
+import { networkInfo } from "@/lib/networkInfo";
 
 export default function ItemDetailPageRight({id}:{id?:string}) {
     const [file, setFile] = useState(null);
@@ -127,8 +128,8 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
                         </div>
 
                         <div className="space-y-2 mt-5">
-                        <a className="font-bold mb-2">Price</a>
-                        <PriceComponent price={price}/>
+                        <a className="font-bold mb-2">{section.items[4].name} ({networkInfo[0].symbol})</a>
+                        <PriceComponent price={price} symbol={networkInfo[0].symbol} />
                         </div>
 
                         <div className="space-y-2 mt-5">
