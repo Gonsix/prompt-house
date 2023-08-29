@@ -2,8 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { SPTContext } from "@/components/SellPage";
 
-
-const PriceComponent = () => {
+const PriceComponent = ({symbol}:{symbol:string}) => {
   const { price, setPrice } = useContext(SPTContext);
   let digit : number = 0.0;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,8 +27,8 @@ const PriceComponent = () => {
     <div className="flex flex-row space-x-4">
       <input onChange={handleChange} type="text" className="w-300  p-2 border rounded bg-pbr-purple text-left" required/><br/>
       <div>
-        <i>Commission(10%): {(Number.parseFloat(price)*0.1)} ETH</i><br />
-        <i>Your Benefit: {(Number.parseFloat(price)*0.9)} ETH</i><br />
+        <i>Commission(10%): {(Number.parseFloat(price)*0.1)} {symbol}</i><br />
+        <i>Your Benefit: {(Number.parseFloat(price)*0.9)} {symbol}</i><br />
       </div>
     </div>
   );
