@@ -2,7 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { SPTContext } from "@/components/ItemDetails/ItemDetailPage";
 
-const BuyPromptInputForm = ({prompt}:{prompt:string}) => {
+const PromptInputForm = ({prompt}:{prompt:string}) => {
   return (
     <div>
       {/* <select value={prompt} onChange={handleChange} className="text-white font-mono bg-pbr-purple p-2 rounded-lg🧙🏻">
@@ -22,4 +22,4 @@ const BuyPromptInputForm = ({prompt}:{prompt:string}) => {
   );
 }
   
-  export default BuyPromptInputForm;
+  export default PromptInputForm;
