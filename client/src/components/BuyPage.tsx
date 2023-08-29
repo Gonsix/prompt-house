@@ -1,5 +1,4 @@
 "use client"
-import { items_discriptions } from '@/lib/items_discriptions';
 import ShowImg from "@/components/ShowImg";
 import { useState, createContext, useContext, ContextType } from "react";
 import BuyPrompt from "@/components/BuyPrompt"
@@ -23,7 +22,7 @@ type SPTContextType = {
 
 export const SPTContext = createContext({} as SPTContextType) ;
 
-function Page({id} : {id : string} ) {
+function BuyPage({id} : {id : string} ) {
 
     const [prompt, setPrompt] = useState<string>('');
     const [params, setParams] = useState<string>('');
@@ -64,4 +63,4 @@ function Page({id} : {id : string} ) {
     );
 }
 
-export default Page;
+export default BuyPage;
