@@ -4,6 +4,8 @@ import Footer from '@/components/Footer'
 import Link from 'next/link'
 import HomePageTopRight from './HomePageTopRight'
 import HomePageDown from './HomePageDown'
+import {networkInfo} from '@/lib/networkInfo';
+
 
 export default function HomePage() {
     
@@ -23,7 +25,7 @@ export default function HomePage() {
                             DALL・E, Midjourney, Stable Diffusion 🪄
                         </span>
                         <div className="text-gray-300 text-xl flex">
-                            First Connect Your wallet🦊 to <div className="text-green-500 inline px-2"> Sepolia </div> network
+                            First Connect Your wallet🦊 to <div className="text-green-500 inline px-2"> {networkInfo[0].activeChain} </div> network
                         </div>
                     </div>
 

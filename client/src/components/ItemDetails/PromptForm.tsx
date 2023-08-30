@@ -95,45 +95,47 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
     }
     
 
-    const HTML = items_discriptions.map((section) => {
+    const HTML = items_discriptions.map((section, index : number) => {
         const pageType = isOwner? 'owned' : 'buy';
         if(section.pageType == pageType){
             return(
-                    <div className="space-y-10">
-                        <h1 className="text-4xl font-bold mb-8 ">{section.title}</h1>
-                        <div>{section.title_Dscription}</div>
+                    <div key={index}>
+                        <div className="space-y-10">
+                            <h1 className="text-4xl font-bold mb-8 ">{section.title}</h1>
+                            <div>{section.title_Dscription}</div>
 
-                        <div className="space-y-2">
-                        <a className="font-bold">{section.items[0].name}</a>
-                        <div className="text-gray-400">{section.items[0].description}</div>
-                        <input type='text' disabled value={selectedModel ? selectedModel : "Loading data..."}  className="text-white font-mono bg-pbr-purple p-2 rounded-lg" />
-                        </div>
+                            <div className="space-y-2">
+                            <a className="font-bold">{section.items[0].name}</a>
+                            <div className="text-gray-400">{section.items[0].description}</div>
+                            <input type='text' disabled value={selectedModel ? selectedModel : "Loading data..."}  className="text-white font-mono bg-pbr-purple p-2 rounded-lg" />
+                            </div>
 
-                        <div className="space-y-2" hidden = {!isOwner}>
-                        <a className="font-bold">{section.items[1].name}</a>
-                        <div className="text-gray-400">{section.items[1].description}</div>
-                        <PromptInputForm prompt={prompt} />
-                        </div>
+                            <div className="space-y-2" hidden = {!isOwner}>
+                            <a className="font-bold">{section.items[1].name}</a>
+                            <div className="text-gray-400">{section.items[1].description}</div>
+                            <PromptInputForm prompt={prompt} />
+                            </div>
 
-                        <div className="space-y-2" hidden = {!isOwner}>
-                        <a className="font-bold">{section.items[2].name}</a>
-                        <div className="text-gray-400">{section.items[2].description}</div>
-                        <ResizableParametersForm params={params}/>
-                        </div>
+                            <div className="space-y-2" hidden = {!isOwner}>
+                            <a className="font-bold">{section.items[2].name}</a>
+                            <div className="text-gray-400">{section.items[2].description}</div>
+                            <ResizableParametersForm params={params}/>
+                            </div>
 
-                        <div className="space-y-2">
-                        <a className="font-bold">{section.items[3].name}</a>
-                        <div className="text-gray-400">{section.items[3].description}</div>
-                        <ResizableDescriptionForm description={description}/>
-                        </div>
+                            <div className="space-y-2">
+                            <a className="font-bold">{section.items[3].name}</a>
+                            <div className="text-gray-400">{section.items[3].description}</div>
+                            <ResizableDescriptionForm description={description}/>
+                            </div>
 
-                        <div className="space-y-2 mt-5">
-                        <a className="font-bold mb-2">{section.items[4].name} ({networkInfo[0].symbol})</a>
-                        <PriceComponent price={price} symbol={networkInfo[0].symbol} />
-                        </div>
+                            <div className="space-y-2 mt-5">
+                            <a className="font-bold mb-2">{section.items[4].name} ({networkInfo[0].symbol})</a>
+                            <PriceComponent price={price} symbol={networkInfo[0].symbol} />
+                            </div>
 
-                        <div className="space-y-2 mt-5">
-                        <BuyButton buying={buying} isOwner={isOwner} handleSubmit={handleSubmit}/>
+                            <div className="space-y-2 mt-5">
+                            <BuyButton buying={buying} isOwner={isOwner} handleSubmit={handleSubmit}/>
+                            </div>
                         </div>
                     </div>
             );

@@ -9,11 +9,11 @@ module.exports = {
     },
     polygon_mumbai: {
       url: "https://mumbai.rpc.thirdweb.com",
-      accounts: [process.env.KOME_PRIVATE_KEY]
+      accounts: [process.env.PRIVATE_KEY]
     },
     polygonzkEvm: {
       url: "https://rpc.public.zkevm-test.net",
-      accounts: [process.env.KOME_PRIVATE_KEY]
+      accounts: [process.env.PRIVATE_KEY]
     }
   },
    solidity: "0.8.19",
