@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactStars from 'react-stars';
 
-export default function StarsComponent({setStars}:{setStars: any })
-{
+export default function StarsComponent({ratingChange}:{ratingChange: any })
+{  
+    
     return(
         <div>
             <ReactStars
@@ -10,7 +11,7 @@ export default function StarsComponent({setStars}:{setStars: any })
             count={6}
             size={24}
             half={false}
-            onChange={setStars}
+            onChange={ratingChange}
             color2={'#ffd700'} />
         </div>
     );

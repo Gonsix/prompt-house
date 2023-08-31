@@ -104,6 +104,10 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
             setIsOwner(true);//test
         }
     }
+    const ratingChange = (newRating : any)=>{
+        console.log(newRating);
+        setStars(newRating);
+    }
     
 
     const HTML = items_discriptions.map((section, index: number) => {
@@ -145,7 +149,7 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
                             <div hidden={!isOwner && !isOngoing}>
                                 <div hidden={!isOngoing}>
                                     <div className="space-y-2 mt-5" >
-                                        <StarsComponent  setStars={setStars}/>
+                                        <StarsComponent  ratingChange={ratingChange}/>
                                     </div>
 
                                     <div className="space-y-2 mt-5" >
