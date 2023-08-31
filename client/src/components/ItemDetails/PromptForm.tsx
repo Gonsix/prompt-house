@@ -26,6 +26,8 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
     const [stars, setStars] = useState<number>(1);
     const [isOwner, setIsOwner] = useState<boolean>(false);
     const [isOngoing, setIsOngoing] = useState<boolean>(false);
+    const [numSales, setNumSales] = useState<number>(0);
+    const [sumRate, setSumRate] = useState<number>(0);
 
     const {
         tokenURI, setTokenURI,
@@ -88,11 +90,12 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
             setDescription(itemInfo.description);
             setSelectedModel(itemInfo.model);
             setPrice(itemInfo.price.toString());
-            
+            setNumSales(itemInfo.numSales.toNumber()); // 何回売れたか
+            setSumRate(itemInfo.sumRate.toNumber());  // トータルの星の数
         };
 
         fetchItems();
-    }, [id, params, setDescription, setParams, setPrice, setPrompt, setSelectedModel, setTokenURI]);
+    }, [id, params, setDescription, setSumRate, setPrice, setNumSales, setSelectedModel, setTokenURI]);
 
     const handleSubmit = async (event:any)=>
     {
@@ -167,24 +170,24 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
                             <PriceComponent price={price} symbol={networkInfo[0].symbol} />
                             </div>
 
+                            <div>
+                                <div className="space-y-2 mt-5" >
+                                    <StarsComponent isOngoing={isOngoing} ratingChange={ratingChange}  numSales={numSales} sumRate={sumRate}/>
+                                </div>
+                            </div>
+
+                            <div hidden={!isOngoing}>
+                                <div className="space-y-2 mt-5" >
+                                    <ReviewButton buying={buying} handleSubmit={handleSubmit}/>
+                                </div>
+                            </div>
+                              
                             <div hidden={isOwner||isOngoing}>
                                 <div className="space-y-2 mt-5">
                                     <BuyButton buying={buying} handleSubmit={handleSubmit}/>
                                 </div>
                             </div>
-
-                            <div hidden={!isOwner && !isOngoing}>
-                                <div hidden={!isOngoing}>
-                                    <div className="space-y-2 mt-5" >
-                                        <StarsComponent  ratingChange={ratingChange}/>
-                                    </div>
-
-                                    <div className="space-y-2 mt-5" >
-                                        <ReviewButton buying={buying} handleSubmit={handleSubmit}/>
-                                    </div>
-                                </div>
-
-                            </div>
+                            
                         </div>
                     </div>
             );
