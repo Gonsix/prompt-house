@@ -1,6 +1,6 @@
 import React from "react";
 
-const BuyButton = ({buying, handleSubmit}:{buying:boolean,  handleSubmit: any}) =>{
+const ReviewButton = ({buying, handleSubmit}:{buying:boolean,  handleSubmit: any}) =>{
     return(
         <div>
             {buying 
@@ -18,11 +18,11 @@ const BuyButton = ({buying, handleSubmit}:{buying:boolean,  handleSubmit: any}) 
                     onClick={handleSubmit}
                     className="py-2.5  w-32 px-3 mr-2 text-xl font-medium bg-gradient-to-br  from-yellow-500 to-red-400 text-white  rounded-lg focus:outline-none focus:shadow-outline hover:from-yellow-400 hover:to-orange-400"
                     >
-                    Buy  
+                    Review
                 </button>
                 }
         </div>
     );
 }
 
-export default BuyButton;
+export default ReviewButton;

@@ -11,9 +11,6 @@ import SPTMarket from "../../../hardhat/contractAddress.json";
 
 function OwnedPage() {
 
-
-
-
     return (
         <div className="flex flex-col space-y-12">
             <div className="min-h-56 mb-4">

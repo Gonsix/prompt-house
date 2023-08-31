@@ -3,6 +3,7 @@ import ResizableDescriptionForm from "@/components/ItemDetails/ResizableDescript
 import PriceComponent from "@/components/ItemDetails/PriceComponent";
 import ResizableParametersForm from "@/components/ItemDetails/ResizableParametersForm";
 import BuyButton from "./BuyButton";
+import ReviewButton from "./ReviewButton";
 
 import { items_discriptions } from "@/lib/items_discriptions";
 
@@ -14,12 +15,17 @@ import { useEffect,useState, CSSProperties, useRef, FormEvent } from 'react';
 import { useContext } from "react";
 import { SPTContext } from "@/components/ItemDetails/ItemDetailPage";
 import { networkInfo } from "@/lib/networkInfo";
+import StarsComponent from "./StarsComponent";
 
 export default function ItemDetailPageRight({id}:{id?:string}) {
     const [file, setFile] = useState(null);
     const [localURL, setLocalURL] = useState<string>();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [buying, setBuying] = useState<boolean>(false);
+    const [stars, setStars] = useState<number>(1);
+    const [isOwner, setIsOwner] = useState<boolean>(false);
+    const [isOngoing, setIsOngoing] = useState<boolean>(false);
+
     const {
         tokenURI, setTokenURI,
         prompt, setPrompt,
@@ -40,7 +46,7 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
         isCanceled : boolean
     }
     const [items, setItems ]  = useState<ItemInfoType[]>([]);
-    const [isOwner, setIsOwner] = useState<boolean>(false);
+
     useEffect(() => {
         const fetchItems = async () => {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -51,10 +57,10 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
             let promptInfo;
             try{
                 promptInfo = await market.connect(signer).showPromptParams(id);
-                setPrompt(promptInfo.prompt);
-                setParams(promptInfo.params);
-                setIsOwner(true);
-
+                //Check whether this user owner or not
+                setIsOwner(false); // = Contract function 
+                //Check Whether this user bought this item already reviewd this Item or not
+                setIsOngoing(true);//= Contract function 
             }catch(e){
                 setIsOwner(false);
             }
@@ -81,22 +87,36 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
 
         const MARKET_ADDRESS = SPTMarket.address;
         const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
-        // console.log(price.toString());
-        try{
-            const tx = await market.connect(signer).buySPT(id, {value: BigNumber.from(price)});
-            await tx.wait();
-            window.location.reload(); 
-        }catch(e){
-            setBuying(false);
-            alert("Faild to buy, please try again.");
+        //Buy controll
+        if(!isOwner && !isOngoing){
+            try{
+                const tx = await market.connect(signer).buySPT(id, {value: BigNumber.from(price)});
+                await tx.wait();
+                window.location.reload(); 
+            }catch(e){
+                setBuying(false);
+                alert("Faild to buy, please try again.");
+            }
+        }else if(isOngoing){
+            //market.connect(signer).reviewItem(id, stars);
+            alert('test');
+            setIsOngoing(false);//test
+            setIsOwner(true);//test
         }
-
-        
+    }
+    const ratingChange = (newRating : any)=>{
+        console.log(newRating);
+        setStars(newRating);
     }
     
 
-    const HTML = items_discriptions.map((section, index : number) => {
-        const pageType = isOwner? 'owned' : 'buy';
+
+    const HTML = items_discriptions.map((section, index: number) => {
+        let tmp = 'buy';
+        if(isOwner) tmp = 'owned';
+        else if(isOngoing) tmp = 'ongoing';
+        const pageType = tmp;
+
         if(section.pageType == pageType){
             return(
                     <div key={index}>
@@ -110,17 +130,6 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
                             <input type='text' disabled value={selectedModel ? selectedModel : "Loading data..."}  className="text-white font-mono bg-pbr-purple p-2 rounded-lg" />
                             </div>
 
-                            <div className="space-y-2" hidden = {!isOwner}>
-                            <a className="font-bold">{section.items[1].name}</a>
-                            <div className="text-gray-400">{section.items[1].description}</div>
-                            <PromptInputForm prompt={prompt} />
-                            </div>
-
-                            <div className="space-y-2" hidden = {!isOwner}>
-                            <a className="font-bold">{section.items[2].name}</a>
-                            <div className="text-gray-400">{section.items[2].description}</div>
-                            <ResizableParametersForm params={params}/>
-                            </div>
 
                             <div className="space-y-2">
                             <a className="font-bold">{section.items[3].name}</a>
@@ -130,11 +139,28 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
 
                             <div className="space-y-2 mt-5">
                             <a className="font-bold mb-2">{section.items[4].name} ({networkInfo[0].symbol})</a>
+
+                            <div className="text-gray-400">{section.items[4].description}</div>
                             <PriceComponent price={price} symbol={networkInfo[0].symbol} />
                             </div>
 
-                            <div className="space-y-2 mt-5">
-                            <BuyButton buying={buying} isOwner={isOwner} handleSubmit={handleSubmit}/>
+                            <div hidden={isOwner||isOngoing}>
+                                <div className="space-y-2 mt-5">
+                                    <BuyButton buying={buying} handleSubmit={handleSubmit}/>
+                                </div>
+                            </div>
+
+                            <div hidden={!isOwner && !isOngoing}>
+                                <div hidden={!isOngoing}>
+                                    <div className="space-y-2 mt-5" >
+                                        <StarsComponent  ratingChange={ratingChange}/>
+                                    </div>
+
+                                    <div className="space-y-2 mt-5" >
+                                        <ReviewButton buying={buying} handleSubmit={handleSubmit}/>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
