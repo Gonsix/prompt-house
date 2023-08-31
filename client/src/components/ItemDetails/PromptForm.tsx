@@ -58,6 +58,7 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
 
             const status : UserStatus = await market.connect(signer).getUserStatus(id);
 
+            console.log("Status:", status);
             switch (status){
                 case UserStatus.INITIAL:
                     break;
@@ -114,6 +115,7 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
             }
         }else if(isOngoing){
             //market.connect(signer).reviewItem(id, stars);
+            console.log("stars: ", stars);
             const tx = await market.connect(signer).reviewSPT(id, stars);
             await tx.wait();
 
