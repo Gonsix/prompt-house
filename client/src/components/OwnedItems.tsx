@@ -63,7 +63,7 @@ function PurchasedItems() {
             </div>
             <div>
 
-                { PurchasedItems.length !== 0 ? 
+                { purchasedItems.length !== 0 ? 
                 
                 <Splide
                     options={{
@@ -71,7 +71,7 @@ function PurchasedItems() {
                         perPage : 6,
                         interval: 3000
                     }}>
-                    {PurchasedItems.reverse().map( (item : ItemInfoType, index: number)  => {
+                    {purchasedItems.reverse().map( (item : ItemInfoType, index: number)  => {
 
                         return (
                             <SplideSlide key={index}>

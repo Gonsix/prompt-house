@@ -3,9 +3,11 @@ import ReactStars from 'react-stars';
 
 
 export default function StarsComponent({isOngoing, ratingChange, numSales, sumRate}:{isOngoing: boolean, ratingChange: any, numSales: number, sumRate: number})
+
 {  
     return(
         <div>
+
             <div className='flex flex-row'>
                 <div className='flex'>
                     <ReactStars
@@ -30,6 +32,7 @@ export default function StarsComponent({isOngoing, ratingChange, numSales, sumRa
                 
                 color2={'#ffd700'} />
             </div>
+
         </div>
     );
 }
