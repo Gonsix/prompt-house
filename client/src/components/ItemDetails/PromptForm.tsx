@@ -16,7 +16,7 @@ import { useEffect,useState, CSSProperties, useRef, FormEvent } from 'react';
 import { useContext } from "react";
 import { SPTContext } from "@/components/ItemDetails/ItemDetailPage";
 import { networkInfo } from "@/lib/networkInfo";
-import StarsComponent from "./StarsComponent";
+import ReactStars from "react-stars";
 
 export default function ItemDetailPageRight({id}:{id?:string}) {
     const [file, setFile] = useState(null);
@@ -26,8 +26,7 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
     const [stars, setStars] = useState<number>(1);
     const [isOwner, setIsOwner] = useState<boolean>(false);
     const [isOngoing, setIsOngoing] = useState<boolean>(false);
-    const [numSales, setNumSales] = useState<number>(0);
-    const [sumRate, setSumRate] = useState<number>(0);
+
 
     const {
         tokenURI, setTokenURI,
@@ -36,6 +35,8 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
         description, setDescription,
         selectedModel, setSelectedModel,
         price, setPrice,
+        numSales, setNumSales,
+        sumRate, setSumRate,
     } = useContext(SPTContext);
 
     type ItemInfoType = { // prompt とparams 以外の情報
@@ -171,8 +172,16 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
                             </div>
 
                             <div>
-                                <div className="space-y-2 mt-5" >
-                                    <StarsComponent isOngoing={isOngoing} ratingChange={ratingChange}  numSales={numSales} sumRate={sumRate}/>
+                                <div className="space-y-2 mt-5" hidden={!isOngoing}>
+                                    <ReactStars 
+                                         value={stars}
+                                         count={5}
+                                         size={24}
+                                         half={false}
+                                         onChange={ratingChange}
+                                         edit={true}
+                                 
+                                         color2={'#ffd700'}/>
                                 </div>
                             </div>
 

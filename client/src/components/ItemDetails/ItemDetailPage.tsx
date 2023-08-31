@@ -18,6 +18,10 @@ type SPTContextType = {
     setDescription : (value: string) => void,
     price: string,
     setPrice : (value: string) => void,
+    numSales: number,
+    setNumSales : (value: number) => void,
+    sumRate: number,
+    setSumRate : (value: number) => void,
     tokenURI : string,
     setTokenURI : (value: string) => void
   }
@@ -32,6 +36,8 @@ function ItemDetailPage({id} : {id : string}) {
     const [description, setDescription] = useState<string>('');
     const [price, setPrice] = useState('');
     const [tokenURI, setTokenURI]  = useState<string>('');
+    const [numSales, setNumSales] = useState<number>(0);
+    const [sumRate, setSumRate] = useState<number>(0);
 
     // Context 増やす時
     const SPTcontextValue = {
@@ -45,6 +51,10 @@ function ItemDetailPage({id} : {id : string}) {
         setDescription : setDescription,
         price : price,
         setPrice : setPrice,
+        numSales : numSales,
+        setNumSales : setNumSales,
+        sumRate : sumRate,
+        setSumRate : setSumRate,
         tokenURI : tokenURI,
         setTokenURI: setTokenURI
     };
