@@ -66,7 +66,10 @@ export default function Upload() {
 
         const MARKET_ADDRESS = SPTMarket.address;
         const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
-        const tx = await market.connect(signer).createSPT(imageURL, prompt, params, description, selectedModel, ethers.utils.parseUnits(price))
+
+        // prompt をハッシュ化する
+        const promptHash = "example hash"
+        const tx = await market.connect(signer).createSPT(imageURL, promptHash, params, description, selectedModel, ethers.utils.parseUnits(price))
         const receipt = await tx.wait();
         
         setUploading(false);
