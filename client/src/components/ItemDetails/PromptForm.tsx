@@ -110,11 +110,13 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
     }
     
 
+
     const HTML = items_discriptions.map((section, index: number) => {
         let tmp = 'buy';
         if(isOwner) tmp = 'owned';
         else if(isOngoing) tmp = 'ongoing';
         const pageType = tmp;
+
         if(section.pageType == pageType){
             return(
                     <div key={index}>
@@ -128,6 +130,7 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
                             <input type='text' disabled value={selectedModel ? selectedModel : "Loading data..."}  className="text-white font-mono bg-pbr-purple p-2 rounded-lg" />
                             </div>
 
+
                             <div className="space-y-2">
                             <a className="font-bold">{section.items[3].name}</a>
                             <div className="text-gray-400">{section.items[3].description}</div>
@@ -136,6 +139,7 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
 
                             <div className="space-y-2 mt-5">
                             <a className="font-bold mb-2">{section.items[4].name} ({networkInfo[0].symbol})</a>
+
                             <div className="text-gray-400">{section.items[4].description}</div>
                             <PriceComponent price={price} symbol={networkInfo[0].symbol} />
                             </div>
@@ -156,6 +160,7 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
                                         <ReviewButton buying={buying} handleSubmit={handleSubmit}/>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

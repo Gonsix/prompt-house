@@ -40,7 +40,11 @@ export default function HomePageDown() {
             const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
 
         
-            const listed_ids = await market.connect(signer).getListingSPT();
+            let listed_ids = await market.connect(signer).getListingSPT();
+
+            listed_ids =  listed_ids.filter( function(id : number){
+                return id > 0;
+              })
 
             const fetchedItems = await Promise.all(listed_ids.map(async (id: number)=>{
                 const itemInfo =  await market.getSPTInfo(id);
