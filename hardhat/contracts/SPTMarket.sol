@@ -8,14 +8,15 @@ struct SPT {
     uint id;
     string tokenURI; 
     address publisher; // person who created the prompt.
-    address[] owners;  // person who have an access to the prompt  // mapping (address => bool) isInOwners; // True if a person have an access to the prompt
 
-    string prompt; // privateにされるべき
+    string promptHash; // privateにされるべき
     string params; // privateにされるべき
     string description;
     string model;
     // float tempareture
     uint price;
+    uint numSales; // 何回売れたか
+    uint sumRate;  // トータルの星の数
     bool isCanceled;
 }
 
@@ -25,31 +26,29 @@ contract SPTMarket {
 
     SPT[] private SPT_list; 
     using SafeMath for uint;
-    mapping (address => uint[]) ownedSPTs; // 所有しているSPT一覧を格納。もしかしたら The graph で代用できる。
-    mapping (address => uint[]) listedSPTs; // 
+
+    enum UserStatus { // 
+        INITIAL,    // 無関係
+        ONGOING,// 購入して、評価する前
+        OWNED,  // 評価して、取引が完了した後
+        PUBLISHED // ユーザーが出品者
+    }
+    mapping (address => mapping(uint => UserStatus)) userStatus; // this indicates the user state about the item of the Id
 
     event SPTUpdate(uint id, string tokenURI, address publisher, address[] owners, string prompt, string params,  string description, string model, uint price, bool isCanceled);
 
 
-    modifier onlyOwners(uint id) {
-        // bool isInOwnersFlg = false;
-        // SPT storage item = SPT_list[id];
+    // modifier onlyOwners(uint id) {
 
-        // for(uint i = 0; i < item.owners.length; i++){
-        //     if (msg.sender == item.owners[i]){
-        //         isInOwnersFlg = true;
-        //     }
-        // }
+    //     require(isInOwners(id) == true, "onlyOwners: Only owners can access to this method");
+    //     _;
+    // }
 
-        require(isInOwners(id) == true, "onlyOwners: Only owners can access to this method");
-        _;
-    }
-
-    modifier onlyPublisher(uint id) {
-        SPT storage item = SPT_list[id];
-        require( item.publisher == msg.sender, "onlyPublisher: Only publisher can access to this method");
-        _;
-    }
+    // modifier onlyPublisher(uint id) {
+    //     SPT storage item = SPT_list[id];
+    //     require( item.publisher == msg.sender, "onlyPublisher: Only publisher can access to this method");
+    //     _;
+    // }
 
     modifier onlyDeployer() {
         require( deployer == msg.sender, "onlyDeployer: Only deployer can access to this method");
@@ -60,46 +59,51 @@ contract SPTMarket {
         deployer = msg.sender;
     }
 
-    function isInOwners(uint id) private view returns(bool isInOwnersFlg) {
-        isInOwnersFlg = false;
-        SPT storage item = SPT_list[id];
+    // function isInOwners(uint id) private view returns(bool isInOwnersFlg) {
+    //     isInOwnersFlg = false;
+    //     SPT storage item = SPT_list[id];
 
-        for(uint i = 0; i < item.owners.length; i++){
-            if (msg.sender == item.owners[i]){
-                isInOwnersFlg = true;
-            }
-        }
-        return isInOwnersFlg;
+    //     for(uint i = 0; i < item.owners.length; i++){
+    //         if (msg.sender == item.owners[i]){
+    //             isInOwnersFlg = true;
+    //         }
+    //     }
+    //     return isInOwnersFlg;
+    // }
+
+    function getUserStatus(uint id) public view returns (UserStatus) {
+        return userStatus[msg.sender][id];
+
     }
 
-
-    function createSPT(string memory tokenURI, string memory prompt, string memory params, string memory description, string memory model, uint price) public {
+    function createSPT(string memory tokenURI, string memory promptHash, string memory params, string memory description, string memory model, uint price) public {
         require(price >= 0, "createSPT: price must be greater than or equals to 0");
 
         // mapping (address => bool) storage isInOwners;
-        address[] memory owners;
         uint _id = SPT_list.length;
         SPT memory newSPT = SPT({
             id: _id,
             tokenURI: tokenURI,
             publisher: msg.sender,
-            owners: owners,
-            prompt: prompt,
+            promptHash: promptHash,
             params: params,
             description: description,
             model: model,
             price: price,
+            numSales : 0, // 何回売れたか
+            sumRate : 0,  // トータルの星の数
             isCanceled: false
         });
 
         SPT_list.push(newSPT);
-        emit SPTUpdate(_id, tokenURI, msg.sender, owners, prompt, params, description, model, price, false);
+        // emit SPTUpdate(_id, tokenURI, msg.sender, owners, promptHash, params, description, model, price, false);
+        userStatus[msg.sender][_id] = UserStatus.PUBLISHED;
     }
 
 
-    function showPromptParams(uint id) public view onlyOwners(id) returns(string memory prompt, string memory params)  {
+    function showPromptHash(uint id) public view returns(string memory prompt)  {
         SPT storage item = SPT_list[id];
-        return (item.prompt, item.params);
+        return item.promptHash;
     }
 
     function buySPT(uint id) payable public {
@@ -109,40 +113,39 @@ contract SPTMarket {
         require(item.isCanceled == false, "buySPT: This item cannot be bought");
         require(msg.value == item.price, "buySPT: You don't match the price");
 
-        item.owners.push(msg.sender);
 
-        payable(item.publisher).transfer(item.price.mul(90).div(100));
+        // payable(item.publisher).transfer(item.price.mul(90).div(100));
 
+        userStatus[msg.sender][id] = UserStatus.ONGOING; 
 
-        emit SPTUpdate(id, item.tokenURI, item.publisher, item.owners, item.prompt, item.params, item.description, item.model, item.price, item.isCanceled);
+        // emit SPTUpdate(id, item.tokenURI, item.publisher, item.owners, item.promptHash, item.params, item.description, item.model, item.price, item.isCanceled);
         // ownedSPTs[msg.sender].push(id);
     }
 
-
-
-    function updateSPT(uint id, string memory tokenURI, string memory prompt, string memory params, string memory description, string memory model, uint price, bool isCanceled) public onlyPublisher(id) {
+    function reviewSPT(uint id, uint rate) public { // 評価をして取引を完了させる
         SPT storage item = SPT_list[id];
+        require(userStatus[msg.sender][id] == UserStatus.ONGOING, "reviewSPT: The user cannot review for this Item.");
+        require(rate <= 5 && rate >=1, "reviewSPT: Argument value error, the value of rate must be 1 <= rate <= 5");
 
-        emit SPTUpdate(id, tokenURI, item.publisher, item.owners, prompt, params, description, model, price, isCanceled); // item. が付いているのは、変わらないやつ
+        uint commission_fee = (5-rate)*5; // 評価が高ければ高いほど、出品者へ還元される。0 〜 20 % のあいだ
+
+        payable(item.publisher).transfer(item.price.mul(100-commission_fee).div(100));
+
+        userStatus[msg.sender][id] == UserStatus.OWNED;
+
+        item.numSales++;
+        item.sumRate += rate;
     }
 
-    // function getSPTInfo(uint _id) public view returns(
-    //     uint id,
-    //     string memory tokenURI,
-    //     address publisher, // person who created the prompt.
-    //     address[] memory owners,  // person who have an access to the prompt  // mapping (address => bool) isInOwners; // True if a person have an access to the prompt
 
-    //     string memory prompt,
-    //     string memory description,
-    //     string memory model,
-    //     // float tempareture
-    //     uint price,
-    //     bool isCanceled
-    // )  {
-    //     SPT storage item = SPT_list[_id];
-    //     return (item.id, item.tokenURI, item.publisher, item.owners, item.prompt, item.description, item.model, item.price, item.isCanceled);
-    //     // 配列の形で返る
+
+    // function updateSPT(uint id, string memory tokenURI, string memory prompt, string memory params, string memory description, string memory model, uint price, bool isCanceled) public {
+    //     require(userStatus[msg.sender][id] == UserStatus.PUBLISHED, "onlyOwners: Only owners can access to this method");
+    //     SPT storage item = SPT_list[id];
+
+    //     emit SPTUpdate(id, tokenURI, item.publisher, item.owners, prompt, params, description, model, price, isCanceled); // item. が付いているのは、変わらないやつ
     // }
+
 
 
 
@@ -159,26 +162,56 @@ contract SPTMarket {
 
         uint idx = 0;
         for(uint i=0; i < SPT_list.length; i++){
-            if(SPT_list[i].publisher == msg.sender){
+            if(userStatus[msg.sender][i] == UserStatus.PUBLISHED){
                 ids[idx] = i;
                 idx++;
             }
         }
         return ids;
     }
+
 
     function getOwnedSPTids() public view returns( uint[] memory ) {
         uint[] memory ids = new uint[](SPT_list.length);
 
         uint idx = 0;
         for(uint i=0; i < SPT_list.length; i++){
-            if(isInOwners(i) == true){
+            if(userStatus[msg.sender][i] == UserStatus.OWNED ){
                 ids[idx] = i;
                 idx++;
             }
         }
         return ids;
     }
+
+    function getOnGoingSPTids() public view returns( uint[] memory ) {
+        uint[] memory ids = new uint[](SPT_list.length);
+
+        uint idx = 0;
+        for(uint i=0; i < SPT_list.length; i++){
+            if(userStatus[msg.sender][i] == UserStatus.ONGOING ){
+                ids[idx] = i;
+                idx++;
+            }
+        }
+        return ids;
+    }
+
+
+    // On Going or Owned
+    function getPurchasedSPTids() public view returns( uint[] memory ) {
+        uint[] memory ids = new uint[](SPT_list.length);
+
+        uint idx = 0;
+        for(uint i=0; i < SPT_list.length; i++){
+            if(userStatus[msg.sender][i] == UserStatus.ONGOING || userStatus[msg.sender][i] == UserStatus.OWNED ){
+                ids[idx] = i;
+                idx++;
+            }
+        }
+        return ids;
+    }
+
 
     // これまでに出品されたSPTのうち、キャンセルされてない商品のid を返す
     function getListingSPT() public view returns( uint[] memory){
@@ -199,17 +232,19 @@ contract SPTMarket {
         uint id,
         string memory tokenURI,
         address publisher, // person who created the prompt.
-        address[] memory owners,  // person who have an access to the prompt  // mapping (address => bool) isInOwners; // True if a person have an access to the prompt
 
         string memory description,
         string memory model,
         // float tempareture
         uint price,
+        uint numSales, // 何回売れたか
+        uint sumRate,  // トータルの星の数
+
         bool isCanceled
     ) {
         
         SPT storage item = SPT_list[_id];
-        return (item.id, item.tokenURI, item.publisher, item.owners, item.description, item.model, item.price, item.isCanceled);
+        return (item.id, item.tokenURI, item.publisher, item.description, item.model, item.price, item.numSales, item.sumRate, item.isCanceled);
     }
 
     function getTokenURI(uint id) public view returns(string memory tokenURI) {

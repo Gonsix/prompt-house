@@ -10,6 +10,7 @@ import { items_discriptions } from "@/lib/items_discriptions";
 import { ethers, BigNumber } from "ethers";
 import SPTMarketABI from "../../../../hardhat/artifacts/contracts/SPTMarket.sol/SPTMarket.json";
 import SPTMarket from "../../../../hardhat/contractAddress.json";
+import { UserStatus } from "@/utils/userStatus";
 
 import { useEffect,useState, CSSProperties, useRef, FormEvent } from 'react';
 import { useContext } from "react";
@@ -54,16 +55,30 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
         
             const MARKET_ADDRESS = SPTMarket.address;
             const market = new ethers.Contract(MARKET_ADDRESS, SPTMarketABI.abi, provider);
-            let promptInfo;
-            try{
-                promptInfo = await market.connect(signer).showPromptParams(id);
-                //Check whether this user owner or not
-                setIsOwner(false); // = Contract function 
-                //Check Whether this user bought this item already reviewd this Item or not
-                setIsOngoing(true);//= Contract function 
-            }catch(e){
-                setIsOwner(false);
+
+            const status : UserStatus = await market.connect(signer).getUserStatus(id);
+
+            switch (status){
+                case UserStatus.INITIAL:
+                    break;
+                
+                case UserStatus.ONGOING:
+                    setIsOwner(false); // = Contract function 
+                    setIsOngoing(true);//= Contract function 
+                    break;
+                
+                case UserStatus.OWNED:
+                    setIsOwner(true);
+                    setIsOngoing(false);
+                    break;
+                
+                case UserStatus.PUBLISHED:
+                    setIsOwner(true);
+                    setIsOngoing(false);
+                    break;
             }
+
+
             
             const itemInfo =  await market.getSPTInfo(id);
             setItems(itemInfo);
@@ -99,11 +114,17 @@ export default function ItemDetailPageRight({id}:{id?:string}) {
             }
         }else if(isOngoing){
             //market.connect(signer).reviewItem(id, stars);
-            alert('test');
+            const tx = await market.connect(signer).reviewSPT(id, stars);
+            await tx.wait();
+
+            
             setIsOngoing(false);//test
             setIsOwner(true);//test
+            window.location.reload(); 
         }
     }
+
+
     const ratingChange = (newRating : any)=>{
         console.log(newRating);
         setStars(newRating);
