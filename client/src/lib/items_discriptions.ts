@@ -57,6 +57,33 @@ export type Item = {
           description: '',
         },
       ],
+    },
+    {
+      pageType: 'ongoing',
+      title : 'Prompt Details [Waiting for your review]',
+      title_Dscription : 'After you get this prompt from the publisher,\n Please REVIEW this prompt.',
+      items: [
+        {
+          name: 'Prompt Type',
+          description: '',
+        },
+        {
+          name: 'Prompt',
+          description: '',
+        },
+        {
+          name: 'Parameters',
+          description: '',
+        },
+        {
+          name: 'Description',
+          description: '',
+        },
+        {
+          name: 'Price',
+          description: 'Your review affect the publisher\'s benefit (e.g, 1-star is The Price * 0.7, 5-star is The price * 1)',
+        },
+      ],
     }
   ];
   
