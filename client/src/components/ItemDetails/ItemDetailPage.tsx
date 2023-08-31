@@ -24,7 +24,7 @@ type SPTContextType = {
 
 export const SPTContext = createContext({} as SPTContextType) ;
 
-function BuyPage({id} : {id : string}) {
+function ItemDetailPage({id} : {id : string}) {
 
     const [prompt, setPrompt] = useState<string>('');
     const [params, setParams] = useState<string>('');
@@ -65,4 +65,4 @@ function BuyPage({id} : {id : string}) {
     );
 }
 
-export default BuyPage;
+export default ItemDetailPage;
