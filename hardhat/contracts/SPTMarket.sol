@@ -131,7 +131,7 @@ contract SPTMarket {
 
         payable(item.publisher).transfer(item.price.mul(100-commission_fee).div(100));
 
-        userStatus[msg.sender][id] == UserStatus.OWNED;
+        userStatus[msg.sender][id] = UserStatus.OWNED;
 
         item.numSales++;
         item.sumRate += rate;
